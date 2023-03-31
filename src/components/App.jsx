@@ -1,14 +1,23 @@
 import { AddContact } from './AddContact/AddContact';
 import { ContactsList } from './ContactsList/ContactsList';
 import { Filter } from './Filter/Filter';
-import contacts from '../Data/contacts';
+// import contacts from '../Data/contacts';
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
 export class App extends Component {
   state = {
-    contacts,
+    contacts: [],
     filter: '',
   };
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    return contacts && this.setState({ contacts: JSON.parse(contacts) });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   DataHandleSubmit = data => this.AddContactMarckup(data);
 
